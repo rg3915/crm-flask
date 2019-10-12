@@ -4,6 +4,14 @@ Projeto sobre CRM em Flask.
 
 https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xxiii-application-programming-interfaces-apis
 
+| Método HTTP | URL                 | Notas                      |
+|-------------|---------------------|----------------------------|
+| GET         | /api/customers/<id> | Retorna um cliente.        |
+| GET         | /api/customers      | Retorna todos os clientes. |
+| POST        | /api/customers      | Registra um novo cliente.  |
+| PUT         | /api/customers/<id> | Modifica um cliente.       |
+| DELETE      | /api/customers/<id> | Deleta um cliente.         |
+
 ## Como rodar o projeto?
 
 * Clone esse repositório.
