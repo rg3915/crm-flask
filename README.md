@@ -43,15 +43,19 @@ Em outro terminal, faça:
 ```
 # Ative a virtualenv
 pip install httpie
-http POST http://localhost:5000/api/customers name='Abel'
-http POST http://localhost:5000/api/customers name='Regis'
-http GET http://localhost:5000/api/customers
+http POST http://localhost:5000/api/customers/ name='Abel'
+http POST http://localhost:5000/api/customers/ name='Regis'
+http GET http://localhost:5000/api/customers/
 http PUT http://localhost:5000/api/customers/1 "name=John"
-http GET http://localhost:5000/api/customers
+http GET http://localhost:5000/api/customers/
 http DELETE http://localhost:5000/api/customers/1
 
 names="Elliot Edward Angela Darlene Tyrell Joanna Phillip Whiterose Ollie Krista Gideon Shayla Terry Scott Fernando Leon Romero Trenton Mobley Cisco Dominique Ray Irving Sharon Susan Sutherland Hot Grant Bill Rat Ron Frank"
-for i in $names; do http POST http://localhost:5000/api/customers name=$i; done
+for i in $names; do http POST http://localhost:5000/api/customers/ name=$i; done
 
-http GET http://localhost:5000/api/customers
+http GET http://localhost:5000/api/customers/
 ```
+
+### doc
+
+Veja a doc em `/api/doc/`.
