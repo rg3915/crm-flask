@@ -5,7 +5,7 @@ api = Api(
     version='1.0.0',
     title='Customers',
     doc='/doc/',
-    description='API e-Campus'
+    description='CRM Api'
 )
 
 
