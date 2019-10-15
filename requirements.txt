@@ -3,3 +3,4 @@ Flask-SQLAlchemy==2.4.1
 Flask==1.1.1
 httpie==1.0.3
 python-dotenv==0.10.3
+flask-restplus==0.13.0
