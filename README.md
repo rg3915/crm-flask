@@ -63,3 +63,5 @@ http GET http://localhost:5000/api/customers/
 ### doc
 
 Veja a doc em `/api/doc/`.
+
+![swagger](swagger.png)
