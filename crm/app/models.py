@@ -1,11 +1,10 @@
-from flask import url_for
 from app import db
 
 
 class PaginatedAPIMixin(object):
 
     @staticmethod
-    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
+    def to_collection_dict(query, page, per_page):
         resources = query.paginate(page, per_page, False)
         data = {
             'items': [item.to_dict() for item in resources.items],
@@ -15,14 +14,8 @@ class PaginatedAPIMixin(object):
                 'total_pages': resources.pages,
                 'total_items': resources.total
             },
-            '_links': {
-                'self': url_for(endpoint, page=page, per_page=per_page,
-                                **kwargs),
-                'next': url_for(endpoint, page=page + 1, per_page=per_page,
-                                **kwargs) if resources.has_next else None,
-                'prev': url_for(endpoint, page=page - 1, per_page=per_page,
-                                **kwargs) if resources.has_prev else None
-            }
+            'has_next': True if resources.has_next else False,
+            'has_prev': True if resources.has_prev else False
         }
         return data
 
