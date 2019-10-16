@@ -1,9 +1,9 @@
-from flask_restplus import Resource, abort, reqparse
 from flask import request
+from flask_restplus import Resource, abort, fields, reqparse
 from app import db
-from app.models import Customer
 from app.api import api
-from flask_restplus import fields
+from app.models import Customer
+
 
 customer_model = api.model(
     'Customer',
@@ -40,8 +40,19 @@ parser.add_argument('page', type=int, location='args', required=False)
 parser.add_argument('per_page', 10, type=int, location='args', required=False)
 
 
+pagination_arguments = reqparse.RequestParser()
+pagination_arguments.add_argument(
+    'page', type=int, location='args', required=False, default=1
+)
+pagination_arguments.add_argument(
+    'per_page', type=int, location='args', required=False,
+    choices=[5, 10, 25, 50, 100], default=5
+)
+
+
 @ns_customers.route('/<int:id>')
 class CustomerService(Resource):
+
     @api.marshal_with(customer_model)
     def get(self, id):
         return Customer.query.get_or_404(id).to_dict()
@@ -68,8 +79,8 @@ class CustomerService(Resource):
 
 @ns_customers.route('/')
 class CustomersService(Resource):
-    @api.marshal_list_with(customers_list, code=200, skip_none=True)
-    @api.expect(parser, validate=True)
+    @api.expect(pagination_arguments, validate=True)
+    @api.marshal_list_with(customer_model, code=200)
     def get(self):
         args = parser.parse_args()
         per_page = min(args['per_page'], 100)
