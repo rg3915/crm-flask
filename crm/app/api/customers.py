@@ -16,28 +16,32 @@ customer_model = api.model(
 pagination = api.model(
     'Page Model', {
         'page': fields.Integer(
-            description='Number of this page of results'),
+            description='Number of this page of results'
+        ),
         'per_page': fields.Integer(
-            description='Number of items per page of results'),
+            description='Number of items per page of results'
+        ),
         'total_pages': fields.Integer(
             description='Total number of pages of results'
         ),
-        'total_items': fields.Integer(
-            description='Total number of results'),
+        'total_items': fields.Integer(description='Total number of results'),
         'next_page': fields.String(),
         'prev_page': fields.String()
     }
 )
 
-customers_list = api.inherit('Page of customers', pagination, {
-    'customers': fields.List(fields.Nested(customer_model))
-})
+customers_list = api.inherit(
+    'Page of customers',
+    pagination,
+    {'customers': fields.List(fields.Nested(customer_model))}
+)
 
 ns_customers = api.namespace('customers', description='Customers')
 
 parser = reqparse.RequestParser()
 parser.add_argument('page', 1, type=int, location='args', required=False)
-parser.add_argument('per_page', 10, type=int, location='args', required=False)
+parser.add_argument('per_page', 10, choices=[5, 10, 25, 50, 100], type=int,
+                    location='args', required=False)
 
 
 @ns_customers.route('/<int:id>')
@@ -69,6 +73,7 @@ class CustomerService(Resource):
 
 @ns_customers.route('/')
 class CustomersService(Resource):
+
     @api.expect(parser, validate=True)
     @api.marshal_list_with(customers_list, skip_none=True, code=200)
     def get(self):
@@ -87,14 +92,20 @@ class CustomersService(Resource):
             data.update(
                 {
                     'next_page': api.url_for(
-                        CustomersService, page=page + 1, per_page=per_page)
+                        CustomersService,
+                        page=page + 1,
+                        per_page=per_page
+                    )
                 }
             )
         if query['has_prev']:
             data.update(
                 {
                     'prev_page': api.url_for(
-                        CustomersService, page=page - 1, per_page=per_page)
+                        CustomersService,
+                        page=page - 1,
+                        per_page=per_page
+                    )
                 }
             )
         return data
