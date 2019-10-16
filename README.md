@@ -66,6 +66,6 @@ for i in $names
 done
 
 
-http GET http://localhost:5000/api/customers/
+http GET http://localhost:5000/api/customers/?page=1\&per_page=10
 ```
 
