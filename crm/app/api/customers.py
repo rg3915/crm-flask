@@ -36,18 +36,8 @@ customers_list = api.inherit('Page of customers', pagination, {
 ns_customers = api.namespace('customers', description='Customers')
 
 parser = reqparse.RequestParser()
-parser.add_argument('page', type=int, location='args', required=False)
+parser.add_argument('page', 1, type=int, location='args', required=False)
 parser.add_argument('per_page', 10, type=int, location='args', required=False)
-
-
-pagination_arguments = reqparse.RequestParser()
-pagination_arguments.add_argument(
-    'page', type=int, location='args', required=False, default=1
-)
-pagination_arguments.add_argument(
-    'per_page', type=int, location='args', required=False,
-    choices=[5, 10, 25, 50, 100], default=5
-)
 
 
 @ns_customers.route('/<int:id>')
@@ -79,8 +69,8 @@ class CustomerService(Resource):
 
 @ns_customers.route('/')
 class CustomersService(Resource):
-    @api.expect(pagination_arguments, validate=True)
-    @api.marshal_list_with(customer_model, code=200)
+    @api.expect(parser, validate=True)
+    @api.marshal_list_with(customers_list, skip_none=True, code=200)
     def get(self):
         args = parser.parse_args()
         per_page = min(args['per_page'], 100)
